@@ -1,0 +1,32 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Hospital {
+  createdAt       DateTime  @default(now())
+  descriptionJson Json?
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  location        String?
+  name            String?
+  nameJson        Json?
+  rating          Float?
+  services        Service[]
+  updatedAt       DateTime  @updatedAt
+}
+
+model Service {
+  createdAt       DateTime  @default(now())
+  description     String?
+  descriptionJson Json?
+  hospital        Hospital? @relation(fields: [hospitalId], references: [id])
+  hospitalId      String?   @db.ObjectId
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  name            String?
+  nameJson        Json?
+  updatedAt       DateTime  @updatedAt
+}
